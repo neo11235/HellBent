@@ -14,7 +14,6 @@ than doing two ffts, but faster by about 30%.
 #include<bits/stdc++.h>
 using namespace std;
 
-//typedef complex<double> CD;
 struct CD {
     double x, y;
     CD(double x=0, double y=0) :x(x), y(y) {}
@@ -27,7 +26,6 @@ struct CD {
 };
 CD conj(const CD &c) {return CD(c.x, -c.y);}
 
-typedef long long LL;
 const double PI = acos(-1.0L);
 
 namespace FFT {
@@ -95,7 +93,7 @@ namespace FFT {
         }
     }
 
-    vector<LL> multiply(const vector<LL> &a, const vector<LL> &b) {
+    vector<ll> multiply(const vector<ll> &a, const vector<ll> &b) {
         int n = 1;
         while (n < a.size()+ b.size())  n<<=1;
 
@@ -107,13 +105,13 @@ namespace FFT {
         for (int i=0; i<n; i++) fa[i] = fa[i] * fb[i];
         fft(fa, true);
 
-        vector<LL> ans(n);
+        vector<ll> ans(n);
         for (int i=0; i<n; i++)     ans[i] = round(fa[i].real());
         return ans;
     }
 
     const int M = 1e9+7, B = sqrt(M)+1;
-    vector<LL> anyMod(const vector<LL> &a, const vector<LL> &b) {
+    vector<ll> anyMod(const vector<ll> &a, const vector<ll> &b) {
         int n = 1;
         while (n < a.size()+ b.size())  n<<=1;
         vector<CD> al(n), ar(n), bl(n), br(n);
@@ -125,19 +123,19 @@ namespace FFT {
 //        fft(al); fft(ar); fft(bl); fft(br);
 
         for (int i=0; i<n; i++) {
-            CD ll = (al[i] * bl[i]), lr = (al[i] * br[i]);
+            CD l1 = (al[i] * bl[i]), lr = (al[i] * br[i]);
             CD rl = (ar[i] * bl[i]), rr = (ar[i] * br[i]);
-            al[i] = ll; ar[i] = lr;
+            al[i] = l1; ar[i] = lr;
             bl[i] = rl; br[i] = rr;
         }
 
         pairfft(al, ar, true); pairfft(bl, br, true);
 //        fft(al, true); fft(ar, true); fft(bl, true); fft(br, true);
 
-        vector<LL> ans(n);
+        vector<ll> ans(n);
         for (int i=0; i<n; i++) {
-            LL right = round(br[i].real()), left = round(al[i].real());;
-            LL mid = round(round(bl[i].real()) + round(ar[i].real()));
+            ll right = round(br[i].real()), left = round(al[i].real());;
+            ll mid = round(round(bl[i].real()) + round(ar[i].real()));
             ans[i] = ((left%M)*B*B + (mid%M)*B + right)%M;
         }
         return ans;
